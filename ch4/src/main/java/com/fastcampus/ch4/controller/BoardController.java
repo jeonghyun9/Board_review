@@ -26,6 +26,46 @@ public class BoardController {
     @Autowired
     BoardService boardService;
 
+    @PostMapping("/modify")
+    public String modify(BoardDto boardDto, Model m,HttpSession session
+            , RedirectAttributes rattr) {
+        String writer = (String) session.getAttribute("id");
+        boardDto.setWriter(writer);
+        try {
+            int rowCnt = boardService.modify(boardDto);
+            if (rowCnt != 1) {
+                throw new Exception("modify failed");
+            }
+            rattr.addFlashAttribute("msg", "modify_OK");
+            return "redirect:/board/list";
+        } catch (Exception e) {
+            e.printStackTrace();
+            m.addAttribute(boardDto);
+            m.addAttribute("msg", "modify_ERR");
+            return "board";
+        }
+    }
+
+    @PostMapping("/write")
+    public String write(BoardDto boardDto, Model m,HttpSession session
+                    , RedirectAttributes rattr) {
+        String writer = (String) session.getAttribute("id");
+        boardDto.setWriter(writer);
+        try {
+            int rowCnt = boardService.write(boardDto);
+            if (rowCnt != 1) {
+                throw new Exception("Write failed");
+            }
+            rattr.addFlashAttribute("msg", "WRT_OK");
+            return "redirect:/board/list";
+        } catch (Exception e) {
+            e.printStackTrace();
+            m.addAttribute(boardDto);
+            m.addAttribute("msg", "WRT_ERR");
+            return "board";
+        }
+    }
+
     @GetMapping("/write")
     public String write(Model m) {
         m.addAttribute("mode", "new");
