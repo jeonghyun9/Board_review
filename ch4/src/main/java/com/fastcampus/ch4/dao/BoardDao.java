@@ -33,6 +33,8 @@ public interface BoardDao {
     int increaseViewCnt(Integer bno) throws Exception // int update(String statement, Object parameter)
     ;
 
+    int updateCommentCnt(Integer bno, int i);
+
 //    int searchResultCnt(SearchCondition sc) throws Exception // T selectOne(String statement, Object parameter)
 //    ;
 //
